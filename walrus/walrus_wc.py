@@ -14,4 +14,6 @@ for filename in sys.argv[1:]:
     )
     print("lines | words | characters: ",*counts, path)
 
+# Run in Command Line: python walrus_wc.py <file path or local name>
+
 # ---------------------------------------------------------------------------------#
