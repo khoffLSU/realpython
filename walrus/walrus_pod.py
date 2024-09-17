@@ -1,5 +1,6 @@
 from reader import feed
-import parse, statistics
+import parse
+import statistics
 
 # RSS Feed for podcast titles
 url = "https://realpython.com/podcasts/rpp/feed"
