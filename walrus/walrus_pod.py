@@ -1,5 +1,8 @@
 from reader import feed
-import parse
+import parse, statistics
+
+# RSS Feed for podcast titles
+url = "https://realpython.com/podcasts/rpp/feed"
 
 # pattern to match in the feed
 pattern = parse.compile(
@@ -22,3 +25,12 @@ podcasts = [
 
 for i in podcasts[:10]:
     print(i) 
+
+
+title_len = statistics.mean(
+    title_length 
+    for title in podcasts 
+    if (title_length := len(title)) > 50
+)
+
+print(title_len)
