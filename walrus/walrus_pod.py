@@ -2,7 +2,9 @@ from reader import feed
 import parse
 
 # pattern to match in the feed
-pattern = parse.compile("The Real Python Podcase - Episode #{num:d}: {name}")
+pattern = parse.compile(
+    "The Real Python Podcast – Episode #{num:d}: {name}"
+)
 
 # iniffiecient construction because the parse function is called twice.
 # podcasts = [
@@ -18,4 +20,5 @@ podcasts = [
     if (podcast := pattern.parse(title))
 ]
 
-print(feed.get_titles()[:5]) 
+for i in podcasts[:10]:
+    print(i) 
