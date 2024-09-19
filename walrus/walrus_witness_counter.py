@@ -44,7 +44,7 @@ if any((witness := city).startswith("B") for city in cities):
     print(f'{witness} starts with B')
 
 if all((counter := city).startswith("B") for city in cities):
-    print(f'All cities start with B')
+    print('All cities start with B')
 else: 
     print(f'{counter} does not start with B')
 
