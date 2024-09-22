@@ -23,13 +23,10 @@ def main():
         guesses[idx] = input("\nGuess word: ").upper()
 
         if guesses[idx] == word:
-            show_guesses(guesses, word)
-            print("CORRECT! YOU WIN!")
             break
     
     # Post Process
-    else:
-        game_over(word)
+    game_over(guesses, word, guessed_correctly = (guesses[idx] == word))
 
 
 def get_random_word(word_list):
@@ -56,7 +53,7 @@ def show_guesses(guesses, word):
             elif letter in word:
                 style = "bold white on yellow"
             elif letter in ascii_letters:
-                style = "red on #666666"
+                style = "bold white on red"
             else:
                 style = "dim"
             styled_guess.append(f"[{style}]{letter}[/]")
@@ -81,9 +78,15 @@ def show_guess(guess, word):
     print("Misplaced letters:",", ".join(sorted(missplaced_letters)))
     print("Wrong letters:",", ".join(sorted(incorrect_letters)))
 
-def game_over(word):
+def game_over(guesses, word, guessed_correctly):
     '''Finish game message upom losing'''
-    print(f'The word was {word}')
+    refresh_page(headline="Game Over")
+    show_guesses(guesses, word)
+    
+    if guessed_correctly:
+        console.print(f"\n[bold white on green]Correct, the word is {word}[/]")
+    else:
+        console.print(f"\n[bold white on red]Sorry, the word was {word}[/]")
 
 def refresh_page(headline):
     '''Page refresh for Wordle game'''
