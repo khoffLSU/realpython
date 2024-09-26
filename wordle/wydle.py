@@ -1,9 +1,10 @@
 # wyrdle.py
 
 '''Python Wordle game based on tutorial on realpython.com by Geir Arne Hjelle.'''
+import contextlib
 import pathlib
 import random
-from string import ascii_letters
+from string import ascii_letters, ascii_uppercase
 from rich.console import Console
 from rich.theme import Theme
 
@@ -20,13 +21,14 @@ def main():
     guesses = ["_" * NUM_LETTERS] * NUM_GUESSES
 
     # Process (Main Loop)
-    for idx in range(NUM_GUESSES):
-        refresh_page(headline = f"Guess {idx + 1}")
-        show_guesses(guesses, word)
+    with contextlib.suppress(KeyboardInterrupt):
+        for idx in range(NUM_GUESSES):
+            refresh_page(headline = f"Guess {idx + 1}")
+            show_guesses(guesses, word)
 
-        guesses[idx] = guess_word(previous_guesses=guesses[:idx])
-        if guesses[idx] == word:
-            break
+            guesses[idx] = guess_word(previous_guesses=guesses[:idx])
+            if guesses[idx] == word:
+                break
     
     # Post Process
     game_over(guesses, word, guessed_correctly = (guesses[idx] == word))
@@ -41,15 +43,18 @@ def get_random_word(word_list):
     'SNAKE'
     '''
     if words := [
-        word.upper() for word in word_list
-        if len(word) == 5 and all(letter in ascii_letters for letter in word)
+        word.upper() 
+        for word in word_list
+        if len(word) == NUM_LETTERS 
+        and all(letter in ascii_letters for letter in word)
         ]:
             return random.choice(words)
     else:
-        console.print("No words of length 5 in word list", style = "warning")
+        console.print(f"No words of length {NUM_LETTERS} in word list", style = "warning")
         raise SystemExit()
 
 def show_guesses(guesses, word):
+    letter_status = {letter:letter for letter in ascii_uppercase}
     for guess in guesses:
         styled_guess = [] # initalize a list
         for letter, correct in zip(guess, word):
@@ -62,8 +67,11 @@ def show_guesses(guesses, word):
             else:
                 style = "dim"
             styled_guess.append(f"[{style}]{letter}[/]")
+            if letter != "_":
+                letter_status[letter] = f"[{style}]{letter}[/]"
         
         console.print("".join(styled_guess), justify="center")
+    console.print("\n" + "".join(letter_status.values()), justify = "center")
 
 def show_guess(guess, word):
     '''Show break down of word guessed versus secret word in terms of letters
@@ -106,8 +114,8 @@ def guess_word(previous_guesses):
         console.print(f"You've already guessed {guess}.", style = "warning")
         return guess_word(previous_guesses)
     
-    if len(guess) < 5:
-        console.print("Your guess must be 5 letters.", style = "warning")
+    if len(guess) < NUM_LETTERS:
+        console.print(f"Your guess must be {NUM_LETTERS} letters.", style = "warning")
         return guess_word(previous_guesses)
     
     if any((invalid := letter) not in ascii_letters for letter in guess):
