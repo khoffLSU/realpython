@@ -1,2 +1,2 @@
 # realpython
-realpython projects
+realpython projects in a git repo
